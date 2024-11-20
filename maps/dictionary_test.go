@@ -25,12 +25,23 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	dictionary := Dictionary{}
-
 	t.Run("Add new key", func(t *testing.T) {
 		k, v := "test", "this is just a test"
-		dictionary.Add(k, v)
+		dictionary := Dictionary{}
 
+		err := dictionary.Add(k, v)
+
+		assertError(t, err, nil)
+		assertDefinition(t, dictionary, k, v)
+	})
+
+	t.Run("Add exist key", func(t *testing.T) {
+		k, v := "test", "this is just a test"
+		dictionary := Dictionary{k: v}
+
+		err := dictionary.Add(k, v)
+
+		assertError(t, err, ErrWordExists)
 		assertDefinition(t, dictionary, k, v)
 	})
 }
