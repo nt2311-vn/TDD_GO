@@ -30,7 +30,6 @@ func TestAdd(t *testing.T) {
 		dictionary := Dictionary{}
 
 		err := dictionary.Add(k, v)
-
 		assertError(t, err, nil)
 		assertDefinition(t, dictionary, k, v)
 	})
@@ -40,7 +39,6 @@ func TestAdd(t *testing.T) {
 		dictionary := Dictionary{k: v}
 
 		err := dictionary.Add(k, v)
-
 		assertError(t, err, ErrWordExists)
 		assertDefinition(t, dictionary, k, v)
 	})
@@ -62,13 +60,23 @@ func TestUpdate(t *testing.T) {
 		dict := Dictionary{}
 
 		err := dict.Update(k, v)
-
 		assertError(t, err, ErrWordNotExist)
 	})
 }
 
+func TestDelete(t *testing.T) {
+	k := "test"
+	dict := Dictionary{k: "test definition"}
+
+	dict.Delete(k)
+
+	_, err := dict.Search(k)
+	assertError(t, err, ErrNotFound)
+}
+
 func assertStrings(t testing.TB, got, want string) {
 	t.Helper()
+
 	if got != want {
 		t.Errorf("got %q but want %q", got, want)
 	}
@@ -76,6 +84,7 @@ func assertStrings(t testing.TB, got, want string) {
 
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
+
 	if got != want {
 		t.Errorf("got %q but want %q", got, want)
 	}

@@ -58,3 +58,7 @@ func (d Dictionary) Update(key, newVal string) error {
 		return err
 	}
 }
+
+func (d Dictionary) Delete(key string) {
+	delete(d, key)
+}
