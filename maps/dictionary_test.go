@@ -20,11 +20,17 @@ func TestSearch(t *testing.T) {
 			t.Fatal("expected to get an error")
 		}
 
-		assertStrings(t, err.Error(), want.Error())
+		assertError(t, err, want)
 	})
 }
 
 func assertStrings(t testing.TB, got, want string) {
+	if got != want {
+		t.Errorf("got %q but want %q", got, want)
+	}
+}
+
+func assertError(t testing.TB, got, want error) {
 	if got != want {
 		t.Errorf("got %q but want %q", got, want)
 	}
