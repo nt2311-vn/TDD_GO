@@ -6,11 +6,7 @@ func CheckWebsites(wc WebsiteChecker, webs []string) map[string]bool {
 	rs := make(map[string]bool)
 
 	for _, web := range webs {
-		if wc(web) {
-			rs[web] = true
-		} else {
-			rs[web] = false
-		}
+		rs[web] = wc(web)
 	}
 
 	return rs
