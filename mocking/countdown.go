@@ -15,6 +15,12 @@ type Sleeper interface {
 	Sleep()
 }
 
+type DefaultSleeper struct{}
+
+func (d *DefaultSleeper) Sleep() {
+	time.Sleep(time.Second * 1)
+}
+
 type SpySleeper struct {
 	Calls int
 }
