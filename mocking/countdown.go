@@ -11,6 +11,18 @@ const (
 	finalWord  = "Go!"
 )
 
+type Sleeper interface {
+	Sleep()
+}
+
+type SpySleeper struct {
+	Calls int
+}
+
+func (s *SpySleeper) Sleep() {
+	s.Calls++
+}
+
 func CountDown(w io.Writer) {
 	for i := countStart; i > 0; i-- {
 		fmt.Fprintln(w, i)
