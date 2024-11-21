@@ -23,10 +23,11 @@ func (s *SpySleeper) Sleep() {
 	s.Calls++
 }
 
-func CountDown(w io.Writer) {
+func CountDown(w io.Writer, s *SpySleeper) {
 	for i := countStart; i > 0; i-- {
 		fmt.Fprintln(w, i)
 		time.Sleep(time.Second * 1)
+		s.Sleep()
 	}
 
 	fmt.Fprint(w, finalWord)
