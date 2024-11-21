@@ -8,15 +8,10 @@ import (
 
 var ErrServerNotResp = errors.New("server not respond")
 
+const tenSecondTimeOut = 10
+
 func Racer(a, b string) (string, error) {
-	select {
-	case <-ping(a):
-		return a, nil
-	case <-ping(b):
-		return b, nil
-	case <-time.After(10 * time.Second):
-		return "", ErrServerNotResp
-	}
+	return ConfigurableRacer(a, b, tenSecondTimeOut)
 }
 
 func measureResponseTime(url string) time.Duration {
@@ -35,4 +30,15 @@ func ping(url string) chan struct{} {
 	}()
 
 	return ch
+}
+
+func ConfigurableRacer(a, b string, timeout time.Duration) (string, error) {
+	select {
+	case <-ping(a):
+		return a, nil
+	case <-ping(b):
+		return b, nil
+	case <-time.After(timeout):
+		return "", ErrServerNotResp
+	}
 }
