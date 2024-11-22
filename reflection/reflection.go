@@ -14,6 +14,10 @@ type Person struct {
 
 func walk(x interface{}, fn func(string)) {
 	val := getValue(x)
+
+	walkVal := func(value reflect.Value) {
+		walk(value.Interface(), fn)
+	}
 	numOfVal := 0
 	var getField func(int) reflect.Value
 
@@ -29,6 +33,14 @@ func walk(x interface{}, fn func(string)) {
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
 			walk(val.MapIndex(k).Interface(), fn)
+		}
+	case reflect.Chan:
+		for {
+			if v, ok := val.Recv(); ok {
+				walkVal(v)
+			} else {
+				break
+			}
 		}
 	}
 
