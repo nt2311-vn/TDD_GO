@@ -12,9 +12,9 @@ func TestWalk(t *testing.T) {
 		ExpectedCalls []string
 	}{
 		{
-			"nested fields",
-			&Person{"Chris", Profile{33, "London"}},
-			[]string{"Chris", "London"},
+			"slices",
+			[]Profile{{33, "London"}, {34, "Reykjavík"}},
+			[]string{"London", "Reykjavík"},
 		},
 	}
 
