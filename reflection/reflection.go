@@ -23,9 +23,13 @@ func walk(x interface{}, fn func(string)) {
 	case reflect.Struct:
 		numOfVal = val.NumField()
 		getField = val.Field
-	case reflect.Slice:
+	case reflect.Slice, reflect.Array:
 		numOfVal = val.Len()
 		getField = val.Index
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			walk(val.MapIndex(k).Interface(), fn)
+		}
 	}
 
 	for i := 0; i < numOfVal; i++ {
