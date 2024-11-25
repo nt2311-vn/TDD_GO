@@ -35,3 +35,41 @@ func ConvertToRoman(arabic int) string {
 
 	return result.String()
 }
+
+var allRomanMap = map[string]int{
+	"M":  1000,
+	"CM": 900,
+	"D":  500,
+	"CD": 400,
+	"C":  100,
+	"XC": 90,
+	"L":  50,
+	"XL": 40,
+	"X":  10,
+	"IX": 9,
+	"V":  5,
+	"IV": 4,
+	"I":  1,
+}
+
+func ConvertToArabic(roman string) int {
+	arabicNum := 0
+	romanStr := roman
+
+	for len(romanStr) > 0 {
+		if len(romanStr) >= 2 {
+			if val, ok := allRomanMap[romanStr[0:2]]; ok {
+				arabicNum += val
+				romanStr = romanStr[2:]
+			} else {
+				arabicNum += allRomanMap[romanStr[0:1]]
+				romanStr = romanStr[1:]
+			}
+		} else {
+			arabicNum += allRomanMap[romanStr]
+			romanStr = romanStr[1:]
+		}
+	}
+
+	return arabicNum
+}
