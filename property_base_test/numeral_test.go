@@ -1,6 +1,9 @@
 package propertybasetest
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestRomanNumerals(t *testing.T) {
 	cases := []struct {
@@ -41,6 +44,49 @@ func TestRomanNumerals(t *testing.T) {
 
 			if got != test.Want {
 				t.Errorf("got %q, want %q", got, test.Want)
+			}
+		})
+	}
+}
+
+func TestConvertingToArabic(t *testing.T) {
+	cases := []struct {
+		Description string
+		Roman       string
+		Value       int
+	}{
+		{"1 gets converted to I", "I", 1},
+		{"2 gets converted to II", "II", 2},
+		{"3 gets converted to III", "III", 3},
+		{"4 gets converted to IV (can't repeat more than 3 times)", "IV", 4},
+		{"5 gets converted to V", "V", 5},
+		{"9 gets converted to IX", "IX", 9},
+		{"10 gets converted to X", "X", 10},
+		{"14 gets converted to XIV", "XIV", 14},
+		{"18 gets converted to XVIII", "XVIII", 18},
+		{"20 gets converted to XX", "XX", 20},
+		{"39 gets converted to XXXIX", "XXXIX", 39},
+		{"40 gets converted to XL", "XL", 40},
+		{"47 gets converted to XLVII", "XLVII", 47},
+		{"50 gets converted to L", "L", 50},
+		{"100 gets converted to C", "C", 100},
+		{"90 gets converted to XC", "XC", 90},
+		{"400 gets converted to CD", "CD", 400},
+		{"500 gets converted to D", "D", 500},
+		{"900 gets converted to CM", "CM", 900},
+		{"1000 gets converted to M", "M", 1000},
+		{"1984 gets converted to MCMLXXXIV", "MCMLXXXIV", 1984},
+		{"3999 gets converted to MMMCMXCIX", "MMMCMXCIX", 3999},
+		{"2014 gets converted to MMXIV", "MMXIV", 2014},
+		{"1006 gets converted to MVI", "MVI", 1006},
+		{"798 gets converted to DCCXCVIII", "DCCXCVIII", 798},
+	}
+	for _, test := range cases[:1] {
+		t.Run(fmt.Sprintf("%q gets converted to %d", test.Roman, test.Value), func(t *testing.T) {
+			got := ConvertToArabic(test.Roman)
+
+			if got != test.Value {
+				t.Errorf("got %d, want %d", got, test.Value)
 			}
 		})
 	}
