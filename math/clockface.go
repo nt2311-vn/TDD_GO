@@ -1,4 +1,4 @@
-package math_mod
+package clockface
 
 import "time"
 
@@ -7,6 +7,6 @@ type Point struct {
 	Y float64
 }
 
-func SecondTime(t time.Time) Point {
+func SecondHand(t time.Time) Point {
 	return Point{}
 }
