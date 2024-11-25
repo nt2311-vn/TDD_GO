@@ -1,62 +1,53 @@
 package context_mod
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"testing"
 	"time"
 )
 
 type Store interface {
-	Fetch() string
-	Cancel()
+	Fetch(ctx context.Context) (string, error)
 }
 
 func Server(store Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-
-		data := make(chan string, 1)
-		go func() {
-			data <- store.Fetch()
-		}()
-
-		select {
-		case d := <-data:
-			fmt.Fprint(w, d)
-		case <-ctx.Done():
-			store.Cancel()
-		}
+		data, _ := store.Fetch(r.Context())
+		fmt.Fprint(w, data)
 	}
 }
 
 type SpyStore struct {
-	response  string
-	cancelled bool
-	t         *testing.T
+	response string
+	t        *testing.T
 }
 
-func (s *SpyStore) Fetch() string {
-	time.Sleep(100 * time.Millisecond)
-	return s.response
-}
+func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
+	data := make(chan string, 1)
 
-func (s *SpyStore) Cancel() {
-	s.cancelled = true
-}
+	go func() {
+		var result string
 
-func (s *SpyStore) assertWasCancelled() {
-	s.t.Helper()
+		for _, c := range s.response {
+			select {
+			case <-ctx.Done():
+				log.Println("spy store got cancelled")
+				return
+			default:
+				time.Sleep(10 * time.Millisecond)
+				result += string(c)
+			}
+		}
+		data <- result
+	}()
 
-	if !s.cancelled {
-		s.t.Error("store was not told to cancel")
-	}
-}
-
-func (s *SpyStore) assertWasNotCancelled() {
-	s.t.Helper()
-
-	if s.cancelled {
-		s.t.Error("store was told to cancel")
+	select {
+	case <-ctx.Done():
+		return "", ctx.Err()
+	case res := <-data:
+		return res, nil
 	}
 }

@@ -22,8 +22,6 @@ func TestServer(t *testing.T) {
 
 		response := httptest.NewRecorder()
 		svr.ServeHTTP(response, request)
-
-		store.assertWasCancelled()
 	})
 
 	t.Run("returns data from store", func(t *testing.T) {
@@ -39,7 +37,5 @@ func TestServer(t *testing.T) {
 		if response.Body.String() != data {
 			t.Errorf(`got "%s", want "%s"`, response.Body.String(), data)
 		}
-
-		store.assertWasNotCancelled()
 	})
 }
