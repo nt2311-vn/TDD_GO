@@ -42,7 +42,7 @@ func TestSecondsInRadiants(t *testing.T) {
 }
 
 func secondsInRadians(t time.Time) float64 {
-	return math.Pi
+	return math.Pi / (30 / (float64(t.Second())))
 }
 
 func simpleTime(hours, minutes, seconds int) time.Time {
