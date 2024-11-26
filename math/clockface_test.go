@@ -1,6 +1,7 @@
 package clockface_test
 
 import (
+	"math"
 	"testing"
 	"time"
 
@@ -16,4 +17,18 @@ func TestSecondHandAtMidnight(t *testing.T) {
 	if got != want {
 		t.Errorf("Got %v, but want %v", got, want)
 	}
+}
+
+func TestSecondsInRadiants(t *testing.T) {
+	thirtySeconds := time.Date(312, time.October, 28, 0, 0, 30, 0, time.UTC)
+	want := math.Pi
+	got := secondsInRadians(thirtySeconds)
+
+	if want != got {
+		t.Fatalf("Wanted %v radians, but got %v", want, got)
+	}
+}
+
+func secondsInRadians(t time.Time) float64 {
+	return 0
 }
