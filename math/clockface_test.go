@@ -41,6 +41,25 @@ func TestSecondsInRadiants(t *testing.T) {
 	}
 }
 
+func TestSecondHandPoint(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		point clockface.Point
+	}{
+		{simpleTime(0, 0, 30), clockface.Point{0, -1}},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := secondHandPoint(c.time)
+
+			if got != c.point {
+				t.Fatalf("Wanted %v Point, but got %v", c.point, got)
+			}
+		})
+	}
+}
+
 func secondsInRadians(t time.Time) float64 {
 	return math.Pi / (30 / (float64(t.Second())))
 }
@@ -51,4 +70,8 @@ func simpleTime(hours, minutes, seconds int) time.Time {
 
 func testName(t time.Time) string {
 	return t.Format("15:04:05")
+}
+
+func secondHandPoint(t time.Time) clockface.Point {
+	return clockface.Point{}
 }
