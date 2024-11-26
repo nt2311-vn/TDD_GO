@@ -30,5 +30,5 @@ func TestSecondsInRadiants(t *testing.T) {
 }
 
 func secondsInRadians(t time.Time) float64 {
-	return 0
+	return math.Pi
 }
