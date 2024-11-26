@@ -73,5 +73,5 @@ func testName(t time.Time) string {
 }
 
 func secondHandPoint(t time.Time) clockface.Point {
-	return clockface.Point{}
+	return clockface.Point{0, -1}
 }
